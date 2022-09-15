@@ -15,7 +15,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Table(name = "tb_category")
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Category implements Serializable {
+public class CategoryEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

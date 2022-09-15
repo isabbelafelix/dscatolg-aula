@@ -1,8 +1,9 @@
 package com.devsuperior.dscatalog.service;
 
-import com.devsuperior.dscatalog.entities.Category;
+import com.devsuperior.dscatalog.entities.CategoryEntity;
 import com.devsuperior.dscatalog.repositories.CategoryRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -15,7 +16,8 @@ public class CategoryService {
         this.repository = repository;
     }
 
-    public List<Category> findAll(){
+    @Transactional(readOnly = true)
+    public List<CategoryEntity> findAll(){
         return this.repository.findAll();
     }
 }
