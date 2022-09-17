@@ -1,5 +1,6 @@
 package com.devsuperior.dscatalog.controller;
 
+import com.devsuperior.dscatalog.dto.CategoryDto;
 import com.devsuperior.dscatalog.entities.CategoryEntity;
 import com.devsuperior.dscatalog.service.CategoryService;
 import lombok.AllArgsConstructor;
@@ -16,9 +17,10 @@ import java.util.List;
 public class CategoryController {
 
     private final CategoryService service;
+
     @GetMapping
-    public ResponseEntity<List<CategoryEntity>> findAll(){
-        List<CategoryEntity> list = this.service.findAll();
+    public ResponseEntity<List<CategoryDto>> findAll() {
+        List<CategoryDto> list = this.service.findAll();
 
         return ResponseEntity.ok().body(list);
     }
