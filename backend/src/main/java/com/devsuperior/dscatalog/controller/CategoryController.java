@@ -3,6 +3,7 @@ package com.devsuperior.dscatalog.controller;
 import com.devsuperior.dscatalog.dto.CategoryDto;
 import com.devsuperior.dscatalog.entities.CategoryEntity;
 import com.devsuperior.dscatalog.service.CategoryService;
+import com.devsuperior.dscatalog.service.exceptions.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,6 +29,7 @@ public class CategoryController {
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<CategoryDto> findById(@PathVariable Long id) {
+
         CategoryDto dto = this.service.findById(id);
 
         return ResponseEntity.ok().body(dto);
