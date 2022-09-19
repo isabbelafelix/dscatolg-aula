@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -39,5 +40,13 @@ public class CategoryService {
          * em outras coisas, aplicando uma função a cada elemento da sua lista
          */
 
+    }
+
+    @Transactional(readOnly = true)
+    public CategoryDto findById(Long id) {
+        Optional<CategoryEntity> entityOptional = this.repository.findById(id);
+        CategoryEntity entity = entityOptional.get();
+
+        return new CategoryDto(entity);
     }
 }
