@@ -45,10 +45,21 @@ public class CategoryService {
 
     @Transactional(readOnly = true)
     public CategoryDto findById(Long id) {
+        //vai no repository, faz um findById e retorna um Optional
         Optional<CategoryEntity> entityOptional = this.repository.findById(id);
+        //tento acessar o objeto que está no Optional(categoryEntity)
+        //se o category não existir eu vou instanciar uma excessão
         CategoryEntity entity =
                 entityOptional.orElseThrow(() -> new EntityNotFoundException("Entity not found"));
 
+        return new CategoryDto(entity);
+    }
+    @Transactional
+    public CategoryDto insert(CategoryDto dto) {
+        CategoryEntity entity = new CategoryEntity();
+        entity.setName(dto.getName());
+
+        entity = repository.save(entity);
         return new CategoryDto(entity);
     }
 }
