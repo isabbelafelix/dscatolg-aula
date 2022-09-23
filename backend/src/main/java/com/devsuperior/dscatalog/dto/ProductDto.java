@@ -49,6 +49,7 @@ public class ProductDto implements Serializable {
     //QUANDO CHAMAR ESSE CONSTRUTOR, QUERO INSTANCIAR O DTO COLOCANDO OS ELEMENTOS,
     //NA LISTA DE CATEGORYDTO(33)
 
+
     public ProductDto(ProductEntity entity, Set<CategoryEntity> categories) {
         this(entity);
 
