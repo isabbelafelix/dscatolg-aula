@@ -1,11 +1,13 @@
 package com.devsuperior.dscatalog.service;
 
+import com.devsuperior.dscatalog.dto.CategoryDto;
 import com.devsuperior.dscatalog.dto.ProductDto;
+import com.devsuperior.dscatalog.entities.CategoryEntity;
 import com.devsuperior.dscatalog.entities.ProductEntity;
+import com.devsuperior.dscatalog.repositories.CategoryRepository;
 import com.devsuperior.dscatalog.repositories.ProductRepository;
 import com.devsuperior.dscatalog.service.exceptions.DataBaseException;
 import com.devsuperior.dscatalog.service.exceptions.ResourceNotFoundException;
-import com.sun.xml.bind.v2.TODO;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
@@ -20,9 +22,11 @@ import java.util.Optional;
 public class ProductService {
 
     private final ProductRepository repository;
+    private final CategoryRepository categoryRepository;
 
-    public ProductService(ProductRepository repository) {
+    public ProductService(ProductRepository repository, CategoryRepository categoryRepository) {
         this.repository = repository;
+        this.categoryRepository = categoryRepository;
     }
 
     @Transactional(readOnly = true)
@@ -61,22 +65,29 @@ public class ProductService {
         return new ProductDto(entity, entity.getCategories());
     }
 
+    //QUANDO VOCÊ VAI INSERIR UM NOVO PRODUTO,
+    //PASSA O DTO COM OS DADOS,
+    //INSTANCIAR UMA ENTIDADE
+    //E COPIAR OS DADOS DO DTO PRA DENTRO DA ENTIDADE
     @Transactional
     public ProductDto insert(ProductDto dto) {
         ProductEntity entity = new ProductEntity();
+        copyDtoToEntity(dto, entity);
         //TODO: modificar
-        entity.setName(dto.getName());
+        //entity.setName(dto.getName());
 
         entity = repository.save(entity);
         return new ProductDto(entity);
     }
+
 
     @Transactional
     public ProductDto update(Long id, ProductDto dto) {
         try {
             ProductEntity entity = repository.getReferenceById(id);
             //TODO: modificar
-            entity.setName(dto.getName());
+            copyDtoToEntity(dto, entity);
+            //entity.setName(dto.getName());
             entity = repository.save(entity);
             return new ProductDto(entity);
         } catch (EntityNotFoundException e) {
@@ -93,5 +104,19 @@ public class ProductService {
             throw new DataBaseException("Integrity violation");
         }
 
+    }
+
+    private void copyDtoToEntity(ProductDto dto, ProductEntity entity) {
+        entity.setName(dto.getName());
+        entity.setDescription(dto.getDescription());
+        entity.setPrice(dto.getPrice());
+        entity.setImgUrl(dto.getImgUrl());
+        entity.setDate(dto.getDate());
+
+        entity.getCategories().clear();
+        for (CategoryDto categoryDto : dto.getCategories()){
+            CategoryEntity categoryEntity = categoryRepository.getReferenceById(categoryDto.getId());
+            entity.getCategories().add(categoryEntity);
+        }
     }
 }
