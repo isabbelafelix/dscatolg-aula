@@ -31,13 +31,14 @@ public class CategoryController {
 
         return ResponseEntity.ok().body(dto);
     }
+
     //Quando for inserir ou atualizar, pode inserir vários dados daquele objeto
     @PostMapping
     public ResponseEntity<CategoryDto> insert(@RequestBody CategoryDto dto) {
         dto = service.insert(dto);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
-                        .path("/{id}")
-                        .buildAndExpand(dto.getId()).toUri();
+                .path("/{id}")
+                .buildAndExpand(dto.getId()).toUri();
 
         return ResponseEntity.created(uri).body(dto);
     }
@@ -47,6 +48,14 @@ public class CategoryController {
         dto = service.update(id, dto);
 
         return ResponseEntity.ok().body(dto);
+
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        service.delete(id);
+
+        return ResponseEntity.noContent().build();
 
     }
 
