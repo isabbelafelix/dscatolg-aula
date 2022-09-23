@@ -3,11 +3,11 @@ package com.devsuperior.dscatalog.service;
 import com.devsuperior.dscatalog.dto.CategoryDto;
 import com.devsuperior.dscatalog.entities.CategoryEntity;
 import com.devsuperior.dscatalog.repositories.CategoryRepository;
-import com.devsuperior.dscatalog.service.exceptions.EntityNotFoundException;
+import com.devsuperior.dscatalog.service.exceptions.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -50,7 +50,7 @@ public class CategoryService {
         //tento acessar o objeto que está no Optional(categoryEntity)
         //se o category não existir eu vou instanciar uma excessão
         CategoryEntity entity =
-                entityOptional.orElseThrow(() -> new EntityNotFoundException("Entity not found"));
+                entityOptional.orElseThrow(() -> new ResourceNotFoundException("Entity not found"));
 
         return new CategoryDto(entity);
     }
@@ -61,5 +61,16 @@ public class CategoryService {
 
         entity = repository.save(entity);
         return new CategoryDto(entity);
+    }
+    @Transactional
+    public CategoryDto update(Long id, CategoryDto dto) {
+       try {
+           CategoryEntity entity = repository.getReferenceById(id);
+           entity.setName(dto.getName());
+           entity = repository.save(entity);
+           return new CategoryDto(entity);
+       } catch (EntityNotFoundException e) {
+           throw new ResourceNotFoundException("Id not found " + id);
+       }
     }
 }
