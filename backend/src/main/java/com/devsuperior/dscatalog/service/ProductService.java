@@ -12,6 +12,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,8 +31,8 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public Page<ProductDto> findAllPaged(PageRequest pageRequest) {
-        Page<ProductEntity> list = this.repository.findAll(pageRequest);
+    public Page<ProductDto> findAllPaged(Pageable pageable) {
+        Page<ProductEntity> list = this.repository.findAll(pageable);
 
         //converter uma lista de categoryEntity para uma lista de categoryDto
         //Pra cada elemento x -> vou transformar ele em outro elemento
